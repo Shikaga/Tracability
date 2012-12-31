@@ -7,18 +7,21 @@ import java.io.IOException;
 
 public class CodeFinder {
 	
-	public String[] getComments(File file) throws IOException {
+	public Comment[] getComments(File file) throws IOException {
 		String fileString = fileToString(file);
 		
 		String[] splitFile = fileString.split("/\\*\\*\n");
 		int commentCount = splitFile.length;
-		if (commentCount == 1) return new String[] {};
+		if (commentCount == 1) return new Comment[] {};
 		
-		String[] comments = new String[commentCount-1];
+		Comment[] comments = new Comment[commentCount-1];
 		
 		for (int i=1; i < commentCount; i++) {			
-			String comment = splitFile[i].substring(0, splitFile[i].indexOf("\n*/"));
-			comments[i-1] = comment;
+			int lengthOfComment = splitFile[i].indexOf("\n*/");
+			String comment = splitFile[i].substring(0, lengthOfComment);
+			String restOfCode = splitFile[i].substring(lengthOfComment+4);
+			String code = restOfCode.substring(0, restOfCode.indexOf("\n"));
+			comments[i-1] = new Comment(comment, code);//comment;
 		}
 		
 		return comments;

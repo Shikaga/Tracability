@@ -38,37 +38,63 @@ public class TestCommentFinder {
 	
 	@Test
 	public void testNoCommentFileReturnsNothing() throws IOException {
-		String[] comments = cf.getComments(noCommentFile);
+		Comment[] comments = cf.getComments(noCommentFile);
 		assertEquals(0, comments.length);
 	}
 	
 	@Test
 	public void testCommentIsExtractedFromFile() throws IOException {
-		String[] comments = cf.getComments(oneCommentFile);
+		Comment[] comments = cf.getComments(oneCommentFile);
 		assertEquals(1, comments.length);
-		assertEquals("Comment", comments[0]);
+		assertEquals("Comment", comments[0].getComment());
 	}
 	
 	@Test
 	public void testTwoLineCommentIsExtractedFromFile() throws IOException {
-		String[] comments = cf.getComments(oneTwoLineCommentFile);
+		Comment[] comments = cf.getComments(oneTwoLineCommentFile);
 		assertEquals(1, comments.length);
-		assertEquals("Comment\non two lines", comments[0]);
+		assertEquals("Comment\non two lines", comments[0].getComment());
 	}
 	
 	@Test
 	public void testThreeLineCommentIsExtractedFromFile() throws IOException {
-		String[] comments = cf.getComments(oneThreeLineCommentFile);
+		Comment[] comments = cf.getComments(oneThreeLineCommentFile);
 		assertEquals(1, comments.length);
-		assertEquals("Comment\non three\nlines", comments[0]);
+		assertEquals("Comment\non three\nlines", comments[0].getComment());
 	}
 	
 	@Test
 	public void testTwoCommentAreExtractedFromFile() throws IOException {
-		String[] comments = cf.getComments(twoCommentFile);
+		Comment[] comments = cf.getComments(twoCommentFile);
 		assertEquals(2, comments.length);
-		assertEquals("Comment", comments[0]);
-		assertEquals("Comment 2", comments[1]);
+		assertEquals("Comment", comments[0].getComment());
+		assertEquals("Comment 2", comments[1].getComment());
 	}
+	
+	@Test
+	public void testCodeIsExtractedFromFile() throws IOException {
+		Comment[] comments = cf.getComments(oneCommentFile);
+		assertEquals(1, comments.length);
+		assertEquals("function x() {", comments[0].getCode());
+	}
+	
+	@Test
+	public void testTwoCodesAreExtractedFromFile() throws IOException {
+		Comment[] comments = cf.getComments(twoCommentFile);
+		assertEquals(2, comments.length);
+		assertEquals("function x() {", comments[0].getCode());
+		assertEquals("function y() {", comments[1].getCode());
+	}
+	
+	@Test
+	public void bothCommentAndCodeAreExtractedCorrectly() throws Exception {
+		Comment[] comments = cf.getComments(twoCommentFile);
+		assertEquals(2, comments.length);
+		assertEquals("Comment", comments[0].getComment());
+		assertEquals("function x() {", comments[0].getCode());
+		assertEquals("Comment 2", comments[1].getComment());
+		assertEquals("function y() {", comments[1].getCode());
+	}
+
 
 }

@@ -8,6 +8,6 @@ function x() {
 /**
 Comment 2
 */
-function x() {
+function y() {
 
 };
